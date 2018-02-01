@@ -13,7 +13,7 @@ module.exports = [
     entry: path.resolve(__dirname, 'src/index.ts'),
     output: {
       path: path.resolve(__dirname, 'lib'),
-      filename: 'phaser-mvc.min.js',
+      filename: 'witcase.min.js',
       library: '',
       libraryTarget: 'commonjs'
     },

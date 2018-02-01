@@ -1,35 +1,26 @@
-import * as Phaser from 'phaser-ce';
-import { Witcase, BaseEngine } from 'phaser-mvc';
+import * as PIXI from 'pixi.js';
+import { Witcase, BaseEngine } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
 
 /*
  * Bootstrap game
  */
 window.onload = () => {
-  let witcase = Witcase.create<Phaser.Game>();
+  let witcase = Witcase.create<[PIXI.Application, PIXI.loaders.Loader]>();
 
   witcase.start((baseEngine: BaseEngine)=> {
-    const game = new Phaser.Game(
-      1000,
-      750,
-      Phaser.CANVAS,
-      'content',
-      {
-        preload: () => {
-          game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    const app = new PIXI.Application();
+    document.body.appendChild(app.view);
+    setTimeout(()=>{
+      baseEngine.preload();
 
-          //wait until Phaser is ready to create first controller
-          witcase.defaultAction = new StartupController().welcome;
-          baseEngine.preload();
-        },
-        create: () => {
-          baseEngine.create();
-        },
-        update: baseEngine.update,
-        render: baseEngine.render
-      }
-    );
+      witcase.defaultAction = new StartupController().welcome;
 
-    return game;
+      baseEngine.create();
+      witcase.engine[1].load(() => {
+        app.ticker.add(baseEngine.update);
+      });
+    },0);
+    return [app, PIXI.loader];
   });
 };

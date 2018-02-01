@@ -1,12 +1,12 @@
-## phaser-mvc
+## witcase
 
-An MVC framework for Phaser.
+A Javascript MVC Game engine.
 
 note: this is only for testing purposes
 
 ## install
 
-```npm install phaser-mvc```
+```npm install witcase```
 
 ## Take a look to examples at [/examples](./examples)
 
@@ -18,7 +18,7 @@ note: this is only for testing purposes
 
 ```javascript
 // app.ts
-import { Bootstrap } from 'phaser-mvc';
+import { Witcase } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
 
 /*
@@ -58,8 +58,8 @@ window.onload = () => {
 
 ```javascript
 // controllers/startup_controller.ts
-import { IViewMap } from 'phaser-mvc';
-import { Controller } from 'phaser-mvc';
+import { IViewMap } from 'witcase';
+import { Controller } from 'witcase';
 import { StartupView } from '../views/startup_view';
 
 /**
@@ -82,8 +82,8 @@ export class StartupController extends Controller {
 
 ```javascript
 // views/startup_view.ts
-import { View } from 'phaser-mvc';
-import { Controller, ViewComponentAdder } from 'phaser-mvc';
+import { View } from 'witcase';
+import { Controller, ViewComponentAdder } from 'witcase';
 
 /**
  * Startup View
@@ -113,7 +113,7 @@ Update view on model change:
 Subscrive controllers to views input events:
 ```
 // view
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'phaser-mvc';
+import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
 
 /**
  * Players Keys View

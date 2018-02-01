@@ -1,4 +1,4 @@
-import { Controller } from 'phaser-mvc';
+import { Controller } from 'witcase';
 import { StartupView } from '../views/startup_view';
 
 /**

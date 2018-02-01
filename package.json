@@ -1,7 +1,7 @@
 {
-  "name": "phaser-mvc",
+  "name": "witcase",
   "version": "0.2.1",
-  "description": "MVC for phaser",
+  "description": "Javascript MVC Game Engine",
   "main": "lib/phaser-mvc.min.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/TLmaK0/phaser-mvc.git"
+    "url": "git+ssh://git@github.com/TLmaK0/witcase.git"
   },
   "keywords": [
     "Phaser",
@@ -21,9 +21,9 @@
   "author": "Hugo Freire <hugofreiregil@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TLmaK0/phaser-mvc/issues"
+    "url": "https://github.com/TLmaK0/witcase/issues"
   },
-  "homepage": "https://github.com/TLmaK0/phaser-mvc#readme",
+  "homepage": "https://github.com/TLmaK0/witcase#readme",
   "dependencies": {
     "@reactivex/rxjs": "^5.5.6",
     "@types/lodash": "^4.14.91",
