@@ -41,13 +41,11 @@ export class ViewComponentAdder<T> {
 export abstract class View<T> {
         protected components: ViewComponent<T>[];
         constructor(witcase?: Witcase<T>);
-        create(): void;
-        preload(_componentAdder: ViewComponentAdder<T>): void;
+        create(_componentAdder: ViewComponentAdder<T>): void;
         update(): void;
         render(): void;
         show(): void;
         readonly engine: T;
-        preloadView(): void;
         updateView(): void;
         renderView(): void;
         updateOnModelChange(_watchFactory: WatchFactory): void;
@@ -58,12 +56,10 @@ export abstract class View<T> {
 export abstract class ViewComponent<T> {
         view: View<T>;
         protected components: ViewComponent<T>[];
-        preload(_componentAdder: ViewComponentAdder<T>, _view: View<T>): void;
-        create(): void;
+        create(_componentAdder: ViewComponentAdder<T>): void;
         update(): void;
         render(): void;
-        preloadComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void;
-        createComponent(): void;
+        createComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void;
         updateComponent(): void;
         renderComponent(): void;
         protected readonly engine: T;
@@ -88,6 +84,7 @@ export class Witcase<T> implements BaseEngine {
     static create<T>(): any;
     start(engineStarter: (baseEngine: BaseEngine) => T): void;
     create: () => void;
+    static preload<T>(resourceLoader: (engine: T) => void): void;
     preload: () => void;
     update: () => void;
     render: () => void;

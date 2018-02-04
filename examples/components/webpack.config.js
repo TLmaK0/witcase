@@ -7,7 +7,7 @@ const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
 module.exports = {
   externals: {
-    'phaser-ce': 'phaser-ce'
+    'lodash': 'lodash'
   },
   entry: path.resolve(__dirname, 'src/app.ts'),
   output: {
@@ -31,19 +31,9 @@ module.exports = {
     new HtmlWebpackExternalsPlugin({
       externals: [
         {
-          module: 'phaser-ce',
-          entry: 'build/custom/p2.min.js',
-          global: 'p2'
-        },
-        {
-          module: 'phaser-ce',
-          entry: 'build/custom/pixi.min.js',
-          global: 'PIXI'
-        },
-        {
-          module: 'phaser-ce',
-          entry: 'build/custom/phaser-split.min.js',
-          global: 'Phaser'
+          module: 'lodash',
+          entry: 'lodash.js',
+          global: '_'
         }
       ]
     }),

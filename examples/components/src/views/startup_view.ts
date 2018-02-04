@@ -1,19 +1,16 @@
-import { View, ViewComponentAdder } from 'phaser-mvc';
+import { View, ViewComponentAdder } from 'witcase';
+import { PixiEngine } from '../pixi_engine';
 import { Dialog } from './components/dialog';
 
 /**
  * Startup View
  */
-export class StartupView extends View<Phaser.Game> {
-  private dialog: Dialog;
+export class StartupView extends View<PixiEngine> {
   public dialogMessage: string;
 
-  public preload(componentAdder: ViewComponentAdder<Phaser.Game>) {
-    this.dialog = new Dialog(this.dialogMessage);
-    componentAdder.addComponent(this.dialog);
-  }
-
-  public create() {
-    this.dialog.open();
+  public create(componentAdder: ViewComponentAdder<PixiEngine>) {
+    const dialog = new Dialog(this.dialogMessage);
+    componentAdder.addComponent(dialog);
+    dialog.open();
   }
 }
