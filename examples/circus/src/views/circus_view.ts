@@ -1,6 +1,8 @@
-import * as Phaser from 'phaser-ce';
+import * as PIXI from 'pixi.js';
 
-import { View, ViewComponentAdder, WatchFactory } from 'phaser-mvc';
+import { View, ViewComponentAdder, WatchFactory, Witcase } from 'witcase';
+
+import { GameEngine } from '../game_engine';
 import { Cannon } from '../models/cannon';
 import { Human } from '../models/human';
 import { Trampoline } from '../models/trampoline';
@@ -10,35 +12,50 @@ const human = require('../assets/images/human.png');
 const trampoline = require('../assets/images/trampoline.png');
 
 
+Witcase.preload<GameEngine>((engine: GameEngine) => {
+  engine.load('cannon', cannon);
+  engine.load('human', human);
+  engine.load('trampoline', trampoline);
+});
+
 /**
  * Cannon View
  */
-export class CircusView extends View<Phaser.Game> {
-  private cannonSprite: Phaser.Sprite;
-  private humanSprite: Phaser.Sprite;
+export class CircusView extends View<GameEngine> {
+  private cannonSprite: PIXI.Sprite;
+  private humanSprite: PIXI.Sprite;
 
   public cannon: Cannon;
   public human: Human;
   public trampoline: Trampoline;
 
-  public preload(_componentAdder: ViewComponentAdder<Phaser.Game>){
-    this.engine.load.image('cannon', cannon);
-    this.engine.load.image('human', human);
-    this.engine.load.image('trampoline', trampoline);
-  }
+  public create(_componentAdder: ViewComponentAdder<GameEngine>) {
+    const trampolineSprite = new PIXI.Sprite(this.engine.loader.resources.trampoline.texture);
+    trampolineSprite.position.x = this.trampoline.body.position[0];
+    trampolineSprite.position.y = this.trampoline.body.position[1];
 
-  public create() {
-    const trampolineSprite = this.engine.add.sprite(this.trampoline.body.x, this.trampoline.body.y, 'trampoline');
-    trampolineSprite.scale.setTo(0.5, 0.5);
-    this.humanSprite = this.engine.add.sprite(this.human.body.x, this.human.body.y, 'human');
-    this.humanSprite.scale.setTo(0.5, 0.5);
-    this.humanSprite.visible = false;
+    trampolineSprite.scale.x = 0.5;
+    trampolineSprite.scale.y = 0.5;
 
-    this.cannonSprite = this.engine.add.sprite(this.cannon.x, this.cannon.y, 'cannon');
-    this.cannonSprite.scale.setTo(0.5, 0.5);
-    this.cannonSprite.anchor.setTo(0.5, 0.5);
-    this.cannonSprite.angle = this.cannon.angle;
+    this.engine.app.stage.addChild(trampolineSprite);
 
+    this.humanSprite = new PIXI.Sprite(this.engine.loader.resources.human.texture);
+    this.humanSprite.position.x = this.human.body.position[0];
+    this.humanSprite.position.y = this.human.body.position[1];
+    this.humanSprite.scale.x = 0.5;
+    this.humanSprite.scale.y = 0.5;
+    this.engine.app.stage.addChild(this.humanSprite);
+    //this.humanSprite.visible = false;
+
+    this.cannonSprite = new PIXI.Sprite(this.engine.loader.resources.cannon.texture);
+    this.cannonSprite.position.x = this.cannon.x;
+    this.cannonSprite.position.y = this.cannon.y;
+    this.cannonSprite.scale.x = 0.5;
+    this.cannonSprite.scale.y = 0.5;
+    this.cannonSprite.anchor.set(0.5);
+    this.cannonSprite.rotation = this.cannon.angle;
+
+    this.engine.app.stage.addChild(this.cannonSprite);
   }
 
   public updateOnModelChange(watchFactory: WatchFactory){
@@ -51,13 +68,13 @@ export class CircusView extends View<Phaser.Game> {
   }
 
   private rotateCannon = (angle: number) => {
-    this.cannonSprite.angle = angle;
+   this.cannonSprite.rotation = angle;
   }
 
   private moveHuman = () => {
-    this.humanSprite.angle = this.human.body.angle;
-    this.humanSprite.x = this.human.body.x;
-    this.humanSprite.y = this.human.body.y;
+    this.humanSprite.rotation = this.human.body.interpolatedAngle;
+    this.humanSprite.position.x = this.human.body.interpolatedPosition[0];
+    this.humanSprite.position.y = this.human.body.interpolatedPosition[1];
   }
 
   private hideHuman = (hide: boolean) => {

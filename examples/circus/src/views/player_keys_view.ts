@@ -1,25 +1,24 @@
-import * as Phaser from 'phaser-ce';
+import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
 
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'phaser-mvc';
+import { GameEngine } from '../game_engine';
 
 /**
  * Players Keys View
  */
 
-export class PlayerKeysView extends View<Phaser.Game> {
+export class PlayerKeysView extends View<GameEngine> {
   rotateCannon: ViewNotifier<string> = new ViewNotifier<string>();
   rotateCannonStop: ViewNotifier<void> = new ViewNotifier<void>();
   launchHuman: ViewNotifier<void> = new ViewNotifier<void>();
 
+
   public updateOnModelChange(watchFactory: WatchFactory){
     watchFactory.create<[boolean, boolean]>(() => [
-      this.engine.input.keyboard.isDown(Phaser.Keyboard.LEFT),
-      this.engine.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
+      this.engine.keyboardPress['ArrowLeft'],
+      this.engine.keyboardPress['ArrowRight']
     ]).subscribe(this.moveCannon);
 
-    watchFactory.create<boolean>(() => this.engine.input.keyboard.isDown(
-      Phaser.Keyboard.SPACEBAR
-    )).subscribe(this.launchHumanNow);
+    watchFactory.create<boolean>(() => this.engine.keyboardPress['Space']).subscribe(this.launchHumanNow);
   }
 
   private moveCannon = (areKeysDown: [boolean, boolean]) => {

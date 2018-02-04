@@ -1,7 +1,8 @@
-import { Controller } from 'phaser-mvc';
+import { Controller } from 'witcase';
 import { CircusView } from '../views/circus_view';
 import { Cannon } from '../models/cannon';
 import { Trampoline } from '../models/trampoline';
+import { Human } from '../models/human';
 import { PlayerKeysView } from '../views/player_keys_view';
 
 import { Inject } from 'typescript-ioc';
@@ -17,7 +18,7 @@ export class CircusController extends Controller {
     super();
   }
 
-  public prepareCannon = (cannon: Cannon, trampoline: Trampoline) => {
+  public prepareCannon = (human: Human, cannon: Cannon, trampoline: Trampoline) => {
     this.cannon = cannon;
     this.playerKeysView.rotateCannon.subscribe(this.rotateCannon);
     this.playerKeysView.rotateCannonStop.subscribe(this.rotateCannonStop);
@@ -26,7 +27,9 @@ export class CircusController extends Controller {
 
     this.circusView.cannon = this.cannon;
     this.circusView.trampoline = trampoline;
-    this.circusView.human = cannon.human;
+    this.circusView.human = human;
+
+    this.cannon.insertHuman(human);
     this.circusView.show();
   }
 

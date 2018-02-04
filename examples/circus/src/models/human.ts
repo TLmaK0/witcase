@@ -1,13 +1,4 @@
-import * as Phaser from 'phaser-ce';
-import { Witcase } from 'phaser-mvc';
+import { GameBody } from './game_body';
 
-export class Human {
-  body: Phaser.Physics.P2.Body;
-
-  constructor(){
-    const engine = <Phaser.Game>Witcase.current.engine;
-    const sprite = engine.add.sprite(0,0, null);
-    engine.physics.p2.enable(sprite);
-    this.body = new Phaser.Physics.P2.Body(engine, sprite, 0, 0, 1);
-  }
+export class Human extends GameBody{
 }
