@@ -1,5 +1,7 @@
 # Pong
 
+A pong game with Phaser
+
 ```npm install```
 ```npm start```
 

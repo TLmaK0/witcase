@@ -2,19 +2,17 @@
 
 A Javascript MVC Game engine.
 
-note: this is only for testing purposes
-
 ## install
 
 ```npm install witcase```
 
 ## Take a look to examples at [/examples](./examples)
 
-![Pong](examples/pong/pong.png)
+![Pong with Phaser](examples/phaser/pong/pong.png)
 
 ![Circus](examples/circus/circus.png)
 
-## How to use
+## How to use with Phaser
 
 ```javascript
 // app.ts
@@ -22,7 +20,7 @@ import { Witcase } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
 
 /*
- * Bootstrap game
+ * Bootstrap game with Phaser
  */
 window.onload = () => {
   let witcase = Witcase.create<Phaser.Game>();
