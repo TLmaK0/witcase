@@ -11,7 +11,7 @@ export class GameEngine {
   app: PIXI.Application = new PIXI.Application();
   loader: PIXI.loaders.Loader = PIXI.loader;
   keyboardPress: { [key: string]: boolean; } = {};
-  world: World = new World({ gravity: [0, 9.82] }); 
+  world: World = new World({ gravity: [0, -9.82] }); 
 
   private resourcesToLoad: Array<[string, string]> = [];
 

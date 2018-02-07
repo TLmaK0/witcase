@@ -8,6 +8,9 @@ export class GameBody {
 
   constructor(options: {} = { mass: 1, position: [0, 0] }){
     this.body = new Body(options);
+  }
+
+  protected addBodyToWorld(){
     (<GameEngine>Witcase.current.engine).world.addBody(this.body);
   }
 }

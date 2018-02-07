@@ -12,7 +12,7 @@ export class Cannon {
   private previusHumanMass: number;
 
   public insertHuman(human: Human){
-    human.body.position = [this.x - 33, this.y];
+    human.body.position = [this.x, this.y];
     human.body.angle = this.angle;
     this.previusHumanMass = human.body.mass;
     human.body.mass = 0; //don't move human in the cannon
@@ -44,6 +44,9 @@ export class Cannon {
     this.human.body.mass = this.previusHumanMass;
     this.human.body.velocity[0] = Math.cos(this.angle) * 100;
     this.human.body.velocity[1] = Math.sin(this.angle) * 100;
+    console.log(this.angle);
+    console.log(Math.cos(this.angle));
+    console.log(Math.sin(this.angle));
     this.human.body.angle = this.angle;
     this.human = null;
   }

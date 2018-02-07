@@ -14,8 +14,8 @@ export class PlayerKeysView extends View<GameEngine> {
 
   public updateOnModelChange(watchFactory: WatchFactory){
     watchFactory.create<[boolean, boolean]>(() => [
-      this.engine.keyboardPress['ArrowLeft'],
-      this.engine.keyboardPress['ArrowRight']
+      this.engine.keyboardPress['ArrowRight'],
+      this.engine.keyboardPress['ArrowLeft']
     ]).subscribe(this.moveCannon);
 
     watchFactory.create<boolean>(() => this.engine.keyboardPress['Space']).subscribe(this.launchHumanNow);
