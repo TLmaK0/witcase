@@ -10,7 +10,7 @@ A Javascript MVC Game engine.
 
 ![Pong with Phaser](examples/phaser/pong/pong.png)
 
-![Circus](examples/circus/circus.png)
+![Circus](examples/pixi/circus/circus.png)
 
 ## How to use with Phaser
 

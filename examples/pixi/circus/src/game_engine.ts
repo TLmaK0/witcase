@@ -1,5 +1,4 @@
 import * as PIXI from 'pixi.js';
-import { Listener } from 'keypress.js';
 import { Witcase, BaseEngine } from 'witcase';
 import { GameController } from './controllers/game_controller';
 import { World } from 'p2';

@@ -15,7 +15,6 @@
     "copy-webpack-plugin": "^4.0.1",
     "html-webpack-externals-plugin": "^3.6.0",
     "html-webpack-plugin": "^2.29.0",
-    "witcase": "^0.2.1",
     "source-map-loader": "^0.2.1",
     "ts-loader": "^2.3.1",
     "tslint": "^5.5.0",
@@ -30,6 +29,7 @@
   "dependencies": {
     "@reactivex/rxjs": "^5.4.2",
     "@types/pixi.js": "^4.7.0",
-    "pixi.js": "^4.7.0"
+    "pixi.js": "^4.7.0",
+    "witcase": "^0.3.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "witcase",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Javascript MVC Game Engine",
   "main": "dist/witcase.min.js",
   "typings": "dist/index.d.ts",
@@ -15,7 +15,9 @@
     "url": "git+ssh://git@github.com/TLmaK0/witcase.git"
   },
   "keywords": [
-    "Phaser",
+    "Typescript",
+    "Game",
+    "Framework",
     "MVC"
   ],
   "author": "Hugo Freire <hugofreiregil@gmail.com>",

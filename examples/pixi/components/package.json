@@ -17,7 +17,6 @@
     "file-loader": "^0.11.2",
     "html-webpack-externals-plugin": "^3.6.0",
     "html-webpack-plugin": "^2.29.0",
-    "pixi": "^0.3.1",
     "source-map-loader": "^0.2.1",
     "ts-loader": "^2.3.1",
     "tslint": "^5.5.0",
@@ -27,12 +26,13 @@
     "tslint-no-circular-imports": "^0.2.1",
     "typescript": "^2.4.2",
     "typings": "^2.1.1",
-    "webpack": "^3.10.0",
-    "witcase": "^0.2.1"
+    "webpack": "^3.10.0"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.5.6",
     "lodash": "^4.17.4",
-    "pixi.js": "^4.7.0"
+    "pixi": "^0.3.1",
+    "pixi.js": "^4.7.0",
+    "witcase": "^0.3.0"
   }
 }

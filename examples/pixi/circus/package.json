@@ -1,7 +1,7 @@
 {
   "name": "components",
   "version": "0.0.1",
-  "description": "Example for phaser-mvc components",
+  "description": "Example for witcase components and PixiJs",
   "main": "app.js",
   "scripts": {
     "build": "webpack",
@@ -10,7 +10,6 @@
   "author": "Hugo Freire <hugofreiregil@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/keypress.js": "^2.1.0",
     "@types/p2": "^0.7.31",
     "@types/pixi.js": "^4.7.0",
     "browser-sync": "^2",
@@ -28,15 +27,14 @@
     "tslint-no-circular-imports": "^0.2.1",
     "typescript": "^2.4.2",
     "typings": "^2.1.1",
-    "webpack": "^3.3.0",
-    "witcase": "^0.2.1"
+    "webpack": "^3.3.0"
   },
   "dependencies": {
     "@reactivex/rxjs": "^5.5.6",
-    "keypress.js": "^2.1.4",
     "lodash": "^4.17.4",
     "p2": "^0.7.1",
     "pixi.js": "^4.7.0",
-    "typescript-ioc": "^1.1.0"
+    "typescript-ioc": "^1.1.0",
+    "witcase": "^0.3.0"
   }
 }
