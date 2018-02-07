@@ -12,8 +12,8 @@ module.exports = [
     },
     entry: path.resolve(__dirname, 'src/index.ts'),
     output: {
-      path: path.resolve(__dirname, 'lib'),
-      filename: 'phaser-mvc.min.js',
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'witcase.min.js',
       library: '',
       libraryTarget: 'commonjs'
     },
@@ -41,7 +41,7 @@ DtsBundlePlugin.prototype.apply = function (compiler) {
 
     dts.bundle({
       name: 'phaser-mvc',
-      main: 'lib/typings/**/*.d.ts',
+      main: 'dist/typings/**/*.d.ts',
       out: '../index.d.ts',
       removeSource: true,
       outputAsModuleFolder: true // to use npm in-package typings

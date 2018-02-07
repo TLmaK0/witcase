@@ -1,28 +1,26 @@
-## phaser-mvc
+## witcase
 
-An MVC framework for Phaser.
-
-note: this is only for testing purposes
+A Javascript MVC Game engine.
 
 ## install
 
-```npm install phaser-mvc```
+```npm install witcase```
 
 ## Take a look to examples at [/examples](./examples)
 
-![Pong](examples/pong/pong.png)
+![Pong with Phaser](examples/phaser/pong/pong.png)
 
-![Circus](examples/circus/circus.png)
+![Circus](examples/pixi/circus/circus.png)
 
-## How to use
+## How to use with Phaser
 
 ```javascript
 // app.ts
-import { Bootstrap } from 'phaser-mvc';
+import { Witcase } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
 
 /*
- * Bootstrap game
+ * Bootstrap game with Phaser
  */
 window.onload = () => {
   let witcase = Witcase.create<Phaser.Game>();
@@ -58,8 +56,8 @@ window.onload = () => {
 
 ```javascript
 // controllers/startup_controller.ts
-import { IViewMap } from 'phaser-mvc';
-import { Controller } from 'phaser-mvc';
+import { IViewMap } from 'witcase';
+import { Controller } from 'witcase';
 import { StartupView } from '../views/startup_view';
 
 /**
@@ -82,8 +80,8 @@ export class StartupController extends Controller {
 
 ```javascript
 // views/startup_view.ts
-import { View } from 'phaser-mvc';
-import { Controller, ViewComponentAdder } from 'phaser-mvc';
+import { View } from 'witcase';
+import { Controller, ViewComponentAdder } from 'witcase';
 
 /**
  * Startup View
@@ -113,7 +111,7 @@ Update view on model change:
 Subscrive controllers to views input events:
 ```
 // view
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'phaser-mvc';
+import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
 
 /**
  * Players Keys View

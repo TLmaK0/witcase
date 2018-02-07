@@ -10,7 +10,7 @@ export class ViewComponentAdder<T> {
 
   public addComponent<S extends ViewComponent<T>>(component: S): S {
     this.components.push(component);
-    component.preloadComponent(this, this.view);
+    component.createComponent(this, this.view);
 
     return component;
   }
@@ -22,16 +22,15 @@ export class ViewComponentAdder<T> {
 export abstract class View<T> {
   protected components: ViewComponent<T>[] = [];
   private watchFactory: WatchFactory = new WatchFactory();
+  private componentAdder: ViewComponentAdder<T> = new ViewComponentAdder<T>(this.components, this);
+  private created = false;
 
   //TODO: we should inject with typescript-ioc
   constructor(private witcase: Witcase<T> = Witcase.current){
     this.witcase.registerView(this);
   }
 
-  public create() {
-    //empty, can be overrided or not
-  }
-  public preload(_componentAdder: ViewComponentAdder<T>) {
+  public create(_componentAdder: ViewComponentAdder<T>) {
     //empty, can be overrided or not
   }
   public update() {
@@ -47,23 +46,19 @@ export abstract class View<T> {
 
   get engine(): T { return this.witcase.engine; }
 
-  public preloadView() {
-    const componentAdder = new ViewComponentAdder(this.components, this);
-    for (const component of this.components) {
-      component.preloadComponent(componentAdder, this);
-    }
-    this.preload(componentAdder);
-  }
-
   private createView() {
+    if (this.created) return;
+    this.created = true;
+
     for (const component of this.components) {
-      component.createComponent();
+      component.createComponent(this.componentAdder, this);
     }
-    this.create();
+    this.create(this.componentAdder);
     this.updateOnModelChange(this.watchFactory);
   }
 
   public updateView() {
+    if (!this.created) this.createView();
     for (const component of this.components) {
       component.updateComponent();
     }
@@ -72,6 +67,7 @@ export abstract class View<T> {
   }
 
   public renderView() {
+    if (!this.created) this.createView();
     for (const component of this.components) {
       component.renderComponent();
     }
@@ -96,11 +92,7 @@ export abstract class ViewComponent<T> {
   public view: View<T>;
   protected components: ViewComponent<T>[] = [];
 
-  public preload(_componentAdder: ViewComponentAdder<T>, _view: View<T>): void {
-    //empty, can be overrided or not
-  }
-
-  public create(): void {
+  public create(_componentAdder: ViewComponentAdder<T>): void {
     //empty, can be overrided or not
   }
 
@@ -112,18 +104,11 @@ export abstract class ViewComponent<T> {
     //empty, can be overrided or not
   }
 
-  public preloadComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void {
+  public createComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void {
     this.view = view;
-    this.preload(componentAdder, view);
+    this.create(componentAdder);
     for (const component of this.components) {
-      component.preloadComponent(componentAdder, view);
-    }
-  }
-
-  public createComponent(): void {
-    this.create();
-    for (const component of this.components) {
-      component.createComponent();
+      component.createComponent(componentAdder, view);
     }
   }
 

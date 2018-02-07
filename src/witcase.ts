@@ -30,9 +30,15 @@ export class Witcase<T> implements BaseEngine {
     this.defaultAction();
   }
 
+  private static resourceLoaders: ((engine: any) => void)[] = [];
+
+  public static preload<T>(resourceLoader: (engine: T)=>void):void {
+    Witcase.resourceLoaders.push(resourceLoader);
+  }
+
   public preload = (): void => {
-    for (const view of this.views){
-      view.preloadView();
+    for (const resourceLoader of Witcase.resourceLoaders){
+      resourceLoader(this.engine);
     }
   }
 
