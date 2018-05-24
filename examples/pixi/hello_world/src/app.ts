@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Witcase, BaseEngine } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
+import { Container } from 'typescript-ioc';
 
 /*
  * Bootstrap game
@@ -14,7 +15,7 @@ window.onload = () => {
     setTimeout(()=>{
       baseEngine.preload();
 
-      witcase.defaultAction = new StartupController().welcome;
+      witcase.defaultAction = Container.get(StartupController).welcome;
 
       baseEngine.create();
       witcase.engine[1].load(() => {

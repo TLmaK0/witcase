@@ -30,6 +30,7 @@
     "@reactivex/rxjs": "^5.4.2",
     "@types/pixi.js": "^4.7.0",
     "pixi.js": "^4.7.0",
+    "typescript-ioc": "^1.2.3",
     "witcase": "^0.3.0"
   }
 }

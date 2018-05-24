@@ -1,4 +1,4 @@
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'phaser-mvc';
+import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
 
 /**
  * Players View

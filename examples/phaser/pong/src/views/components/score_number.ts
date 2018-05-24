@@ -1,5 +1,5 @@
-import { ViewComponent } from 'phaser-mvc';
-import { ViewComponentAdder } from 'phaser-mvc';
+import { ViewComponent } from 'witcase';
+import { ViewComponentAdder } from 'witcase';
 
 export class ScoreNumber extends ViewComponent<Phaser.Game> {
   private lines: Phaser.Graphics[] = [];

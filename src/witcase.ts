@@ -57,4 +57,8 @@ export class Witcase<T> implements BaseEngine {
   public registerView(view: View<T>){
     this.views.push(view);
   }
+
+  public unregisterView(viewToRemove: View<T>){
+    this.views = this.views.filter((view) => { return viewToRemove !== view });
+  }
 }

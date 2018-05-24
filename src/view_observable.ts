@@ -1,6 +1,6 @@
 import { Observable, Observer, Subject } from '@reactivex/rxjs';
 
-export class ViewNotifier<T> {
+export class ViewObservable<T> {
   private observable: Observable<T>;
   private subject: Subject<T>;
 

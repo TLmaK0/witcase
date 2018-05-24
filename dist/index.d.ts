@@ -22,7 +22,19 @@ export class Guid {
     static newGuid(): string;
 }
 
-export class ViewNotifier<T> {
+export class ModelObservableFactory {
+    modelObservables: ModelObservable<any>[];
+    constructor();
+    create<T>(getModel: () => T): Observable<T>;
+}
+
+export class ModelObservable<T> {
+    observable: Observable<T>;
+    observer: Observer<() => T>;
+    getModel: () => T;
+}
+
+export class ViewObservable<T> {
     constructor();
     subscribe(observer: (t: T) => void): void;
     publish(value?: T): void;
@@ -40,6 +52,7 @@ export class ViewComponentAdder<T> {
     */
 export abstract class View<T> {
         protected components: ViewComponent<T>[];
+        onCreated: ViewObservable<void>;
         constructor(witcase?: Witcase<T>);
         create(_componentAdder: ViewComponentAdder<T>): void;
         update(): void;
@@ -48,7 +61,8 @@ export abstract class View<T> {
         readonly engine: T;
         updateView(): void;
         renderView(): void;
-        updateOnModelChange(_watchFactory: WatchFactory): void;
+        destroy(): void;
+        updateOnModelChange(_modelObservableFactory: ModelObservableFactory): void;
 }
 /**
     * Component to be showed in view
@@ -57,24 +71,14 @@ export abstract class ViewComponent<T> {
         view: View<T>;
         protected components: ViewComponent<T>[];
         create(_componentAdder: ViewComponentAdder<T>): void;
-        update(): void;
+        update(_componentAdder: ViewComponentAdder<T>): void;
         render(): void;
+        destroy(): void;
         createComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void;
-        updateComponent(): void;
+        updateComponent(componentAdder: ViewComponentAdder<T>): void;
         renderComponent(): void;
+        destroyComponent(): void;
         protected readonly engine: T;
-}
-
-export class WatchFactory {
-    watchsModel: WatchModel<any>[];
-    constructor();
-    create<T>(getModel: () => T): Observable<T>;
-}
-
-export class WatchModel<T> {
-    observable: Observable<T>;
-    observer: Observer<() => T>;
-    getModel: () => T;
 }
 
 export class Witcase<T> implements BaseEngine {
@@ -89,5 +93,6 @@ export class Witcase<T> implements BaseEngine {
     update: () => void;
     render: () => void;
     registerView(view: View<T>): void;
+    unregisterView(viewToRemove: View<T>): void;
 }
 

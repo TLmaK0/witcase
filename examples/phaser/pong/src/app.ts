@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser-ce';
-import { Witcase, BaseEngine } from 'phaser-mvc';
+import { Witcase, BaseEngine } from 'witcase';
 import { GameController } from './controllers/game_controller';
-
+import { Containter } from 'typescript-ioc';
 /*
  * Bootstrap game
  */

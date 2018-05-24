@@ -1,4 +1,4 @@
-import { ViewComponent, ViewComponentAdder } from 'phaser-mvc';
+import { ViewComponent, ViewComponentAdder } from 'witcase';
 import { ScoreNumber } from './score_number';
 
 export class Scoreboard extends ViewComponent<Phaser.Game> {

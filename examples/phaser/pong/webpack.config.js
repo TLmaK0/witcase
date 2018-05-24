@@ -1,6 +1,4 @@
 const path = require('path');
-const phaserModuleRelativePath = '/node_modules/phaser-ce/';
-const phaserModulePath = path.join(__dirname, phaserModuleRelativePath);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')

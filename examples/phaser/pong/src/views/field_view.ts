@@ -1,4 +1,4 @@
-import { View, ViewComponentAdder, WatchFactory  } from 'phaser-mvc';
+import { View, ViewComponentAdder, WatchFactory  } from 'witcase';
 import { Pong } from '../models/pong';
 import { Ball } from '../models/ball';
 import { Score } from '../models/score';

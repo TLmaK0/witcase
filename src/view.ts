@@ -1,6 +1,7 @@
 import { Witcase } from './witcase';
-import { WatchModel } from './watch_model';
-import { WatchFactory } from './watch_factory';
+import { ModelObservable } from './model_observable';
+import { ModelObservableFactory } from './model_observable_factory';
+import { ViewObservable } from './view_observable';
 
 /**
  * Adds a component to the view and other view components
@@ -21,8 +22,9 @@ export class ViewComponentAdder<T> {
  */
 export abstract class View<T> {
   protected components: ViewComponent<T>[] = [];
-  private watchFactory: WatchFactory = new WatchFactory();
+  private modelObservableFactory: ModelObservableFactory = new ModelObservableFactory();
   private componentAdder: ViewComponentAdder<T> = new ViewComponentAdder<T>(this.components, this);
+  public onCreated: ViewObservable<void> = new ViewObservable<void>();
   private created = false;
 
   //TODO: we should inject with typescript-ioc
@@ -54,33 +56,42 @@ export abstract class View<T> {
       component.createComponent(this.componentAdder, this);
     }
     this.create(this.componentAdder);
-    this.updateOnModelChange(this.watchFactory);
+    this.onCreated.publish();
+    this.updateOnModelChange(this.modelObservableFactory);
   }
 
   public updateView() {
-    if (!this.created) this.createView();
+    if (!this.created) return;
     for (const component of this.components) {
-      component.updateComponent();
+      component.updateComponent(this.componentAdder);
     }
-    this.checkWatchModels();
+    this.checkModels();
     this.update();
   }
 
   public renderView() {
-    if (!this.created) this.createView();
+    if (!this.created) return;
     for (const component of this.components) {
       component.renderComponent();
     }
     this.render();
   }
 
-  public updateOnModelChange(_watchFactory: WatchFactory){
+  public destroy() {
+    for (const component of this.components) {
+      component.destroyComponent();
+    }
+    this.witcase.unregisterView(this);
+    this.destroy();
+  }
+
+  public updateOnModelChange(_modelObservableFactory: ModelObservableFactory){
     //this should be overrided or not
   }
 
-  private checkWatchModels(){
-    for(const watchModel of this.watchFactory.watchsModel){
-      watchModel.observer.next(watchModel.getModel());
+  private checkModels(){
+    for(const modelObservable of this.modelObservableFactory.modelObservables){
+      modelObservable.observer.next(modelObservable.getModel());
     }
   }
 }
@@ -96,11 +107,15 @@ export abstract class ViewComponent<T> {
     //empty, can be overrided or not
   }
 
-  public update(): void {
+  public update(_componentAdder: ViewComponentAdder<T>): void {
     //empty, can be overrided or not
   }
 
   public render(): void {
+    //empty, can be overrided or not
+  }
+
+  public destroy(): void {
     //empty, can be overrided or not
   }
 
@@ -112,10 +127,10 @@ export abstract class ViewComponent<T> {
     }
   }
 
-  public updateComponent(): void {
-    this.update();
+  public updateComponent(componentAdder: ViewComponentAdder<T>): void {
+    this.update(componentAdder);
     for (const component of this.components) {
-      component.updateComponent();
+      component.updateComponent(componentAdder);
     }
   }
 
@@ -124,6 +139,13 @@ export abstract class ViewComponent<T> {
     for (const component of this.components) {
       component.renderComponent();
     }
+  }
+
+  public destroyComponent(): void {
+    for (const component of this.components) {
+      component.destroyComponent();
+    }
+    this.destroy();
   }
 
   protected get engine(): T {

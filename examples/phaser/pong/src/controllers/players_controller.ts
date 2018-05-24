@@ -1,4 +1,4 @@
-import { Controller } from 'phaser-mvc';
+import { Controller } from 'witcase';
 import { Pong } from '../models/pong';
 import { PlayersKeyboardView } from '../views/players_keyboard_view';
 import { PlayersView } from '../views/players_view';
