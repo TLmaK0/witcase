@@ -60,6 +60,12 @@ export abstract class View<T> {
     this.updateOnModelChange(this.modelObservableFactory);
   }
 
+  public hide() {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
+  }
+
   public updateView() {
     if (!this.created) return;
     for (const component of this.components) {
@@ -146,6 +152,16 @@ export abstract class ViewComponent<T> {
       component.destroyComponent();
     }
     this.destroy();
+  }
+
+  public hideComponent(): void {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
+    this.hide();
+  }
+
+  public hide(): void {
   }
 
   protected get engine(): T {

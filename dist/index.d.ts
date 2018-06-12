@@ -59,6 +59,7 @@ export abstract class View<T> {
         render(): void;
         show(): void;
         readonly engine: T;
+        hide(): void;
         updateView(): void;
         renderView(): void;
         destroy(): void;
@@ -78,6 +79,8 @@ export abstract class ViewComponent<T> {
         updateComponent(componentAdder: ViewComponentAdder<T>): void;
         renderComponent(): void;
         destroyComponent(): void;
+        hideComponent(): void;
+        hide(): void;
         protected readonly engine: T;
 }
 
