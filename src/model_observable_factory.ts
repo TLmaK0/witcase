@@ -3,12 +3,9 @@ import { Observable, Observer } from '@reactivex/rxjs';
 import * as _ from 'lodash';
 
 export class ModelObservableFactory {
-  public modelObservables: ModelObservable<any>[] = [];
+  private modelObservables: ModelObservable<any>[] = [];
 
-  constructor(){
-  }
-
-  public create<T>(getModel: () => T): Observable<T> {
+  private createModelObservable<T>(getModel: () => T): Observable<T> {
     const modelObservable = new ModelObservable<T>();
 
     modelObservable.observable = Observable.create(
@@ -24,5 +21,15 @@ export class ModelObservableFactory {
     this.modelObservables.push(modelObservable); 
 
     return modelObservable.observable;
+  }
+
+  protected onChange<T>(getModel: () => T): Observable<T> {
+    return this.createModelObservable(getModel);
+  }
+
+  public checkModelChanges(){
+    for(const modelObservable of this.modelObservables){
+      modelObservable.observer.next(modelObservable.getModel());
+    }
   }
 }

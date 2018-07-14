@@ -13,6 +13,7 @@ export class Witcase<T> implements BaseEngine {
   public static current: any;
 
   private views: View<T>[] = [];
+  private controllers: Controller<T>[] = [];
 
   private constructor(){
   }
@@ -43,7 +44,12 @@ export class Witcase<T> implements BaseEngine {
   }
 
   public update = (): void => {
+    for (const controller of this.controllers){
+      controller.checkModelChanges();
+    }
+
     for (const view of this.views){
+      view.checkModelChanges();
       view.updateView();
     }
   }
@@ -60,5 +66,9 @@ export class Witcase<T> implements BaseEngine {
 
   public unregisterView(viewToRemove: View<T>){
     this.views = this.views.filter((view) => { return viewToRemove !== view });
+  }
+
+  public registerController(controller: Controller<T>){
+    this.controllers.push(controller);
   }
 }

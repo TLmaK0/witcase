@@ -20,22 +20,22 @@ export class ViewComponentAdder<T> {
 /**
  * Input and ouput for the application
  */
-export abstract class View<T> {
+export abstract class View<T> extends ModelObservableFactory {
   protected components: ViewComponent<T>[] = [];
-  private modelObservableFactory: ModelObservableFactory = new ModelObservableFactory();
   private componentAdder: ViewComponentAdder<T> = new ViewComponentAdder<T>(this.components, this);
   public onCreated: ViewObservable<void> = new ViewObservable<void>();
   private created = false;
 
   //TODO: we should inject with typescript-ioc
   constructor(private witcase: Witcase<T> = Witcase.current){
+    super();
     this.witcase.registerView(this);
   }
 
   public create(_componentAdder: ViewComponentAdder<T>) {
     //empty, can be overrided or not
   }
-  public update() {
+  public update(_componentAdder: ViewComponentAdder<T>) {
     //empty, can be overrided or not
   }
   public render() {
@@ -57,7 +57,6 @@ export abstract class View<T> {
     }
     this.create(this.componentAdder);
     this.onCreated.publish();
-    this.updateOnModelChange(this.modelObservableFactory);
   }
 
   public hide() {
@@ -71,8 +70,7 @@ export abstract class View<T> {
     for (const component of this.components) {
       component.updateComponent(this.componentAdder);
     }
-    this.checkModels();
-    this.update();
+    this.update(this.componentAdder);
   }
 
   public renderView() {
@@ -89,16 +87,6 @@ export abstract class View<T> {
     }
     this.witcase.unregisterView(this);
     this.destroy();
-  }
-
-  public updateOnModelChange(_modelObservableFactory: ModelObservableFactory){
-    //this should be overrided or not
-  }
-
-  private checkModels(){
-    for(const modelObservable of this.modelObservableFactory.modelObservables){
-      modelObservable.observer.next(modelObservable.getModel());
-    }
   }
 }
 

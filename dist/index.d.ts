@@ -15,7 +15,8 @@ export interface BaseEngine {
 /**
   * Controller accepts input from view and converts modifieds the model.
   */
-export abstract class Controller {
+export abstract class Controller<T> extends ModelObservableFactory {
+    constructor(witcase?: Witcase<T>);
 }
 
 export class Guid {
@@ -23,9 +24,8 @@ export class Guid {
 }
 
 export class ModelObservableFactory {
-    modelObservables: ModelObservable<any>[];
-    constructor();
-    create<T>(getModel: () => T): Observable<T>;
+    protected onChange<T>(getModel: () => T): Observable<T>;
+    checkModelChanges(): void;
 }
 
 export class ModelObservable<T> {
@@ -50,12 +50,12 @@ export class ViewComponentAdder<T> {
 /**
     * Input and ouput for the application
     */
-export abstract class View<T> {
+export abstract class View<T> extends ModelObservableFactory {
         protected components: ViewComponent<T>[];
         onCreated: ViewObservable<void>;
         constructor(witcase?: Witcase<T>);
         create(_componentAdder: ViewComponentAdder<T>): void;
-        update(): void;
+        update(_componentAdder: ViewComponentAdder<T>): void;
         render(): void;
         show(): void;
         readonly engine: T;
@@ -63,7 +63,6 @@ export abstract class View<T> {
         updateView(): void;
         renderView(): void;
         destroy(): void;
-        updateOnModelChange(_modelObservableFactory: ModelObservableFactory): void;
 }
 /**
     * Component to be showed in view
@@ -84,6 +83,8 @@ export abstract class ViewComponent<T> {
         protected readonly engine: T;
 }
 
+/**
+  */
 export class Witcase<T> implements BaseEngine {
     engine: T;
     defaultAction: () => void;
@@ -97,5 +98,6 @@ export class Witcase<T> implements BaseEngine {
     render: () => void;
     registerView(view: View<T>): void;
     unregisterView(viewToRemove: View<T>): void;
+    registerController(controller: Controller<T>): void;
 }
 
