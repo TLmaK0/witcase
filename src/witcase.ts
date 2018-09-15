@@ -16,7 +16,7 @@ export class Witcase<T> implements BaseEngine {
   private views: View<T>[] = [];
   private controllers: Controller<T>[] = [];
 
-  public router: RouteService = new RouteService();
+  public route: RouteService = new RouteService();
 
   private constructor(){
   }

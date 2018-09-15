@@ -16,6 +16,7 @@ export interface BaseEngine {
   * Controller accepts input from view and converts modifieds the model.
   */
 export abstract class Controller<T> extends ModelObservableFactory {
+    protected route: RouteService;
     constructor(witcase?: Witcase<T>);
 }
 
@@ -101,7 +102,7 @@ export class Witcase<T> implements BaseEngine {
     engine: T;
     defaultAction: () => void;
     static current: any;
-    router: RouteService;
+    route: RouteService;
     static create<T>(): any;
     start(engineStarter: (baseEngine: BaseEngine) => T): void;
     create: () => void;
