@@ -63,8 +63,8 @@ export abstract class View<T> extends ModelObservableFactory {
         update(_componentAdder: ViewComponentAdder<T>): void;
         render(): void;
         show(): void;
-        readonly engine: T;
         hide(): void;
+        readonly engine: T;
         updateView(): void;
         renderView(): void;
         destroy(): void;
@@ -84,7 +84,9 @@ export abstract class ViewComponent<T> {
         renderComponent(): void;
         destroyComponent(): void;
         hideComponent(): void;
+        showComponent(): void;
         hide(): void;
+        show(): void;
         protected readonly engine: T;
 }
 

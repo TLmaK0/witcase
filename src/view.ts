@@ -43,6 +43,15 @@ export abstract class View<T> extends ModelObservableFactory {
 
   public show() {
     this.createView();
+    for (const component of this.components) {
+      component.showComponent();
+    }
+  }
+
+  public hide() {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
   }
 
   get engine(): T { return this.witcase.engine; }
@@ -56,12 +65,6 @@ export abstract class View<T> extends ModelObservableFactory {
     }
     this.create(this.componentAdder);
     this.onCreated.publish();
-  }
-
-  public hide() {
-    for (const component of this.components) {
-      component.hideComponent();
-    }
   }
 
   public updateView() {
@@ -95,6 +98,8 @@ export abstract class View<T> extends ModelObservableFactory {
 export abstract class ViewComponent<T> {
   public view: View<T>;
   protected components: ViewComponent<T>[] = [];
+  private _visible: boolean = true;
+  private _localCall: boolean = false;
 
   public create(_componentAdder: ViewComponentAdder<T>): void {
     //empty, can be overrided or not
@@ -142,13 +147,39 @@ export abstract class ViewComponent<T> {
   }
 
   public hideComponent(): void {
-    for (const component of this.components) {
-      component.hideComponent();
-    }
+    this._localCall = true;
     this.hide();
   }
 
+  private hideAllComponents() {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
+  }
+
+  public showComponent(): void {
+    if (this._visible) {
+      this._localCall = true;
+      this.show();
+    }
+  }
+
+  private showAllComponents() {
+    for (const component of this.components) {
+      component.showComponent();
+    }
+  }
+
   public hide(): void {
+    this.hideAllComponents();
+    if (this._localCall) this._localCall = false; //no set _visible false if show comes from view show method
+    else this._visible = false;
+  }
+
+  public show(): void {
+    this.showAllComponents();
+    if (this._localCall) this._localCall = false; //no set _visible true if show comes from view show method
+    else this._visible = true;
   }
 
   protected get engine(): T {
