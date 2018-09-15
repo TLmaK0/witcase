@@ -1,6 +1,11 @@
-import { ModelObservable } from './model_observable';
 import { Observable, Observer } from '@reactivex/rxjs';
 import * as _ from 'lodash';
+
+class ModelObservable<T> {
+  observable: Observable<T>;
+  observer: Observer<() => T>;
+  getModel: () => T;
+}
 
 export class ModelObservableFactory {
   private modelObservables: ModelObservable<any>[] = [];
@@ -20,7 +25,7 @@ export class ModelObservableFactory {
 
     this.modelObservables.push(modelObservable); 
 
-    return modelObservable.observable;
+    return modelObservable.observable.skip(1); //we wait until change
   }
 
   protected onChange<T>(getModel: () => T): Observable<T> {

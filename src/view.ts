@@ -1,5 +1,4 @@
 import { Witcase } from './witcase';
-import { ModelObservable } from './model_observable';
 import { ModelObservableFactory } from './model_observable_factory';
 import { ViewObservable } from './view_observable';
 

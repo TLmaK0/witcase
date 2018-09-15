@@ -3,7 +3,7 @@
 //   ../../@reactivex/rxjs
 
 import { Observable } from '@reactivex/rxjs';
-import { Observable, Observer } from '@reactivex/rxjs';
+import { Observable, Subject } from '@reactivex/rxjs';
 
 export interface BaseEngine {
     preload(): void;
@@ -28,14 +28,18 @@ export class ModelObservableFactory {
     checkModelChanges(): void;
 }
 
-export class ModelObservable<T> {
-    observable: Observable<T>;
-    observer: Observer<() => T>;
-    getModel: () => T;
+export class RouteActionParams {
+    route: string;
+    action: string | undefined;
+    params: string | undefined;
+    constructor(route: string, action?: string | undefined, params?: string | undefined);
+}
+export class RouteService extends WitcaseObservable<RouteActionParams> {
+    goTo(route: string, action?: string, params?: any): void;
+    onRoute(route: string, observer: (routeParams: RouteActionParams) => void): void;
 }
 
-export class ViewObservable<T> {
-    constructor();
+export class ViewObservable<T> extends WitcaseObservable<T> {
     subscribe(observer: (t: T) => void): void;
     publish(value?: T): void;
 }
@@ -83,12 +87,21 @@ export abstract class ViewComponent<T> {
         protected readonly engine: T;
 }
 
+export class WitcaseObservable<T> {
+    protected observable: Observable<T>;
+    protected subject: Subject<T>;
+    constructor();
+    protected subscribe(observer: (t: T) => void): void;
+    protected publish(value?: T): void;
+}
+
 /**
   */
 export class Witcase<T> implements BaseEngine {
     engine: T;
     defaultAction: () => void;
     static current: any;
+    router: RouteService;
     static create<T>(): any;
     start(engineStarter: (baseEngine: BaseEngine) => T): void;
     create: () => void;

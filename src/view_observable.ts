@@ -1,20 +1,12 @@
-import { Observable, Observer, Subject } from '@reactivex/rxjs';
+import { WitcaseObservable } from './witcase_observable';
 
-export class ViewObservable<T> {
-  private observable: Observable<T>;
-  private subject: Subject<T>;
-
-  constructor(){
-    this.subject = new Subject<T>();
-    this.observable = new Observable<T>().multicast(this.subject);
-  }
-
+export class ViewObservable<T> extends WitcaseObservable<T>{
   public subscribe(observer: (t: T) => void){
-    this.observable.subscribe(observer);
+    super.subscribe(observer); 
   }
 
   public publish(value?: T){
-    this.subject.next(value);
+    super.publish(value);
   }
 }
 

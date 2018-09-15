@@ -4,6 +4,7 @@ import { Controller } from './controller';
 import { BaseEngine } from './base_engine';
 import { View } from './view';
 import { Guid } from './guid';
+import { RouteService } from './route_service';
 
 export class Witcase<T> implements BaseEngine {
   public engine: T;
@@ -14,6 +15,8 @@ export class Witcase<T> implements BaseEngine {
 
   private views: View<T>[] = [];
   private controllers: Controller<T>[] = [];
+
+  public router: RouteService = new RouteService();
 
   private constructor(){
   }
