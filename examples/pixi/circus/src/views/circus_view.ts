@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-import { View, ViewComponentAdder, WatchFactory, Witcase } from 'witcase';
+import { View, ViewComponentAdder, ViewObservable, Witcase } from 'witcase';
 
 import { GameEngine } from '../game_engine';
 import { Cannon } from '../models/cannon';
@@ -60,11 +60,9 @@ export class CircusView extends View<GameEngine> {
     this.cannonSprite.rotation = -this.cannon.angle;
 
     this.engine.app.stage.addChild(this.cannonSprite);
-  }
 
-  public updateOnModelChange(watchFactory: WatchFactory){
-    watchFactory.create<number>(() => this.cannon.angle).subscribe(this.rotateCannon);
-    watchFactory.create<boolean>(() => this.cannon.hasHuman()).subscribe(this.hideHuman);
+    this.onChange<number>(() => this.cannon.angle).subscribe(this.rotateCannon);
+    this.onChange<boolean>(() => this.cannon.hasHuman()).subscribe(this.hideHuman);
   }
 
   public update(){

@@ -5,7 +5,9 @@ import { Trampoline } from '../models/trampoline';
 import { Witcase } from 'witcase';
 import { Body, Plane } from 'p2';
 import  { GameEngine } from '../game_engine';
+import { Singleton } from 'typescript-ioc';
 
+@Singleton
 export class Circus {
   public cannon: Cannon;
   public human: Human;

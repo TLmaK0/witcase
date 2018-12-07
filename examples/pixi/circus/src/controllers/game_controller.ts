@@ -1,20 +1,21 @@
 import { Controller } from 'witcase';
 import { Circus } from '../models/circus';
 import { CircusController } from './circus_controller';
+import { GameEngine } from '../game_engine';
 
-import { Container, Inject } from 'typescript-ioc';
+import { Inject } from 'typescript-ioc';
 /**
  * Game controller
  */
-export class GameController extends Controller {
-  circus: Circus;
-
-  constructor(@Inject private circusController: CircusController){
+export class GameController extends Controller<GameEngine> {
+  constructor(
+    @Inject private circusController: CircusController,
+    @Inject private circus: Circus
+  ){
     super();
   }
 
   public startGame = () => {
-    this.circus = new Circus();
     this.circusController.prepareCannon(this.circus.human,
                                         this.circus.cannon,
                                         this.circus.trampoline);

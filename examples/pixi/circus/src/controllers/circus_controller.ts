@@ -4,13 +4,13 @@ import { Cannon } from '../models/cannon';
 import { Trampoline } from '../models/trampoline';
 import { Human } from '../models/human';
 import { PlayerKeysView } from '../views/player_keys_view';
-
+import { GameEngine } from '../game_engine';
 import { Inject } from 'typescript-ioc';
 
 /**
  * Circus controller
  */
-export class CircusController extends Controller {
+export class CircusController extends Controller<GameEngine> {
   cannon: Cannon;
 
   constructor(@Inject private circusView: CircusView,

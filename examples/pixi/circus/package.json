@@ -35,6 +35,6 @@
     "p2": "^0.7.1",
     "pixi.js": "^4.7.0",
     "typescript-ioc": "^1.1.0",
-    "witcase": "^0.3.0"
+    "witcase": "file:../../.."
   }
 }
