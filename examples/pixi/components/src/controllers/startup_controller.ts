@@ -1,10 +1,11 @@
 import { Controller } from 'witcase';
 import { StartupView } from '../views/startup_view';
+import { PixiEngine } from '../pixi_engine';
 
 /**
  * Startup controller
  */
-export class StartupController extends Controller {
+export class StartupController extends Controller<PixiEngine> {
   private startupView: StartupView;
 
   constructor() {
