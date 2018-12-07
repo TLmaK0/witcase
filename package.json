@@ -1,6 +1,6 @@
 {
   "name": "witcase",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Javascript MVC Game Engine",
   "main": "dist/witcase.min.js",
   "typings": "dist/index.d.ts",
@@ -45,5 +45,8 @@
     "typescript": "^2.5.3",
     "uglifyjs-webpack-plugin": "^1.1.5",
     "webpack": "^3.7.1"
+  },
+  "release-it": {
+    "requireCleanWorkingDir": false
   }
 }
