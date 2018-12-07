@@ -1,6 +1,6 @@
 {
   "name": "witcase",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Javascript MVC Game Engine",
   "main": "dist/witcase.min.js",
   "typings": "dist/index.d.ts",
@@ -8,7 +8,8 @@
     "build": "webpack",
     "watch": "webpack --watch",
     "test": "karma start",
-    "lint": "tslint --force --project tsconfig.json -t verbose -c tslint.json 'src/**/*.ts'"
+    "lint": "tslint --force --project tsconfig.json -t verbose -c tslint.json 'src/**/*.ts'",
+    "release": "release-it"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   "devDependencies": {
     "dts-bundle": "^0.7.3",
     "html-webpack-externals-plugin": "^3.6.0",
+    "release-it": "^8.3.0",
     "ts-loader": "^2.3.7",
     "tslint": "^5.7.0",
     "tslint-eslint-rules": "^4.1.1",
