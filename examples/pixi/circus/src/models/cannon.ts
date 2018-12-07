@@ -44,9 +44,6 @@ export class Cannon {
     this.human.body.mass = this.previusHumanMass;
     this.human.body.velocity[0] = Math.cos(this.angle) * 100;
     this.human.body.velocity[1] = Math.sin(this.angle) * 100;
-    console.log(this.angle);
-    console.log(Math.cos(this.angle));
-    console.log(Math.sin(this.angle));
     this.human.body.angle = this.angle;
     this.human = null;
   }

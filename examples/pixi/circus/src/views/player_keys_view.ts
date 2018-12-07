@@ -1,4 +1,4 @@
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
+import { View, ViewComponentAdder, ViewObservable } from 'witcase';
 
 import { GameEngine } from '../game_engine';
 
@@ -7,18 +7,18 @@ import { GameEngine } from '../game_engine';
  */
 
 export class PlayerKeysView extends View<GameEngine> {
-  rotateCannon: ViewNotifier<string> = new ViewNotifier<string>();
-  rotateCannonStop: ViewNotifier<void> = new ViewNotifier<void>();
-  launchHuman: ViewNotifier<void> = new ViewNotifier<void>();
+  rotateCannon: ViewObservable<string> = new ViewObservable<string>();
+  rotateCannonStop: ViewObservable<void> = new ViewObservable<void>();
+  launchHuman: ViewObservable<void> = new ViewObservable<void>();
 
 
-  public updateOnModelChange(watchFactory: WatchFactory){
-    watchFactory.create<[boolean, boolean]>(() => [
+  public create(){
+    this.onChange<[boolean, boolean]>(() => [
       this.engine.keyboardPress['ArrowRight'],
       this.engine.keyboardPress['ArrowLeft']
     ]).subscribe(this.moveCannon);
 
-    watchFactory.create<boolean>(() => this.engine.keyboardPress['Space']).subscribe(this.launchHumanNow);
+    this.onChange<boolean>(() => this.engine.keyboardPress['Space']).subscribe(this.launchHumanNow);
   }
 
   private moveCannon = (areKeysDown: [boolean, boolean]) => {

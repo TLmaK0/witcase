@@ -1,15 +1,15 @@
 import { Controller } from 'witcase';
 import { StartupView } from '../views/startup_view';
+import { Inject, Singleton } from 'typescript-ioc';
+import { PixiEngine } from '../pixi_engine';
 
 /**
  * Startup controller
  */
-export class StartupController extends Controller {
-  private startupView: StartupView;
-
-  constructor(){
+@Singleton
+export class StartupController extends Controller<PixiEngine>{
+  constructor(@Inject private startupView: StartupView){
     super();
-    this.startupView = new StartupView();
     this.startupView.welcomeMessage = 'Hello world!';
   }
 

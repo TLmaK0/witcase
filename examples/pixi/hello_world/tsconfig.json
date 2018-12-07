@@ -8,7 +8,9 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noUnusedParameters": true,
+    "moduleResolution": "node",
     "skipLibCheck": true,
-    "moduleResolution": "node"
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

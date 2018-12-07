@@ -1,6 +1,6 @@
 import { Witcase } from './witcase';
-import { WatchModel } from './watch_model';
-import { WatchFactory } from './watch_factory';
+import { ModelObservableFactory } from './model_observable_factory';
+import { ViewObservable } from './view_observable';
 
 /**
  * Adds a component to the view and other view components
@@ -19,21 +19,22 @@ export class ViewComponentAdder<T> {
 /**
  * Input and ouput for the application
  */
-export abstract class View<T> {
+export abstract class View<T> extends ModelObservableFactory {
   protected components: ViewComponent<T>[] = [];
-  private watchFactory: WatchFactory = new WatchFactory();
   private componentAdder: ViewComponentAdder<T> = new ViewComponentAdder<T>(this.components, this);
+  public onCreated: ViewObservable<void> = new ViewObservable<void>();
   private created = false;
 
   //TODO: we should inject with typescript-ioc
   constructor(private witcase: Witcase<T> = Witcase.current){
+    super();
     this.witcase.registerView(this);
   }
 
   public create(_componentAdder: ViewComponentAdder<T>) {
     //empty, can be overrided or not
   }
-  public update() {
+  public update(_componentAdder: ViewComponentAdder<T>) {
     //empty, can be overrided or not
   }
   public render() {
@@ -42,6 +43,15 @@ export abstract class View<T> {
 
   public show() {
     this.createView();
+    for (const component of this.components) {
+      component.showComponent();
+    }
+  }
+
+  public hide() {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
   }
 
   get engine(): T { return this.witcase.engine; }
@@ -54,34 +64,31 @@ export abstract class View<T> {
       component.createComponent(this.componentAdder, this);
     }
     this.create(this.componentAdder);
-    this.updateOnModelChange(this.watchFactory);
+    this.onCreated.publish();
   }
 
   public updateView() {
-    if (!this.created) this.createView();
+    if (!this.created) return;
     for (const component of this.components) {
-      component.updateComponent();
+      component.updateComponent(this.componentAdder);
     }
-    this.checkWatchModels();
-    this.update();
+    this.update(this.componentAdder);
   }
 
   public renderView() {
-    if (!this.created) this.createView();
+    if (!this.created) return;
     for (const component of this.components) {
       component.renderComponent();
     }
     this.render();
   }
 
-  public updateOnModelChange(_watchFactory: WatchFactory){
-    //this should be overrided or not
-  }
-
-  private checkWatchModels(){
-    for(const watchModel of this.watchFactory.watchsModel){
-      watchModel.observer.next(watchModel.getModel());
+  public destroy() {
+    for (const component of this.components) {
+      component.destroyComponent();
     }
+    this.witcase.unregisterView(this);
+    this.destroy();
   }
 }
 
@@ -91,16 +98,22 @@ export abstract class View<T> {
 export abstract class ViewComponent<T> {
   public view: View<T>;
   protected components: ViewComponent<T>[] = [];
+  private _visible: boolean = true;
+  private _localCall: boolean = false;
 
   public create(_componentAdder: ViewComponentAdder<T>): void {
     //empty, can be overrided or not
   }
 
-  public update(): void {
+  public update(_componentAdder: ViewComponentAdder<T>): void {
     //empty, can be overrided or not
   }
 
   public render(): void {
+    //empty, can be overrided or not
+  }
+
+  public destroy(): void {
     //empty, can be overrided or not
   }
 
@@ -112,10 +125,10 @@ export abstract class ViewComponent<T> {
     }
   }
 
-  public updateComponent(): void {
-    this.update();
+  public updateComponent(componentAdder: ViewComponentAdder<T>): void {
+    this.update(componentAdder);
     for (const component of this.components) {
-      component.updateComponent();
+      component.updateComponent(componentAdder);
     }
   }
 
@@ -124,6 +137,49 @@ export abstract class ViewComponent<T> {
     for (const component of this.components) {
       component.renderComponent();
     }
+  }
+
+  public destroyComponent(): void {
+    for (const component of this.components) {
+      component.destroyComponent();
+    }
+    this.destroy();
+  }
+
+  public hideComponent(): void {
+    this._localCall = true;
+    this.hide();
+  }
+
+  private hideAllComponents() {
+    for (const component of this.components) {
+      component.hideComponent();
+    }
+  }
+
+  public showComponent(): void {
+    if (this._visible) {
+      this._localCall = true;
+      this.show();
+    }
+  }
+
+  private showAllComponents() {
+    for (const component of this.components) {
+      component.showComponent();
+    }
+  }
+
+  public hide(): void {
+    this.hideAllComponents();
+    if (this._localCall) this._localCall = false; //no set _visible false if show comes from view show method
+    else this._visible = false;
+  }
+
+  public show(): void {
+    this.showAllComponents();
+    if (this._localCall) this._localCall = false; //no set _visible true if show comes from view show method
+    else this._visible = true;
   }
 
   protected get engine(): T {

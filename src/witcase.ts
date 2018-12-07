@@ -4,6 +4,7 @@ import { Controller } from './controller';
 import { BaseEngine } from './base_engine';
 import { View } from './view';
 import { Guid } from './guid';
+import { RouteService } from './route_service';
 
 export class Witcase<T> implements BaseEngine {
   public engine: T;
@@ -13,6 +14,9 @@ export class Witcase<T> implements BaseEngine {
   public static current: any;
 
   private views: View<T>[] = [];
+  private controllers: Controller<T>[] = [];
+
+  public route: RouteService = new RouteService();
 
   private constructor(){
   }
@@ -43,7 +47,12 @@ export class Witcase<T> implements BaseEngine {
   }
 
   public update = (): void => {
+    for (const controller of this.controllers){
+      controller.checkModelChanges();
+    }
+
     for (const view of this.views){
+      view.checkModelChanges();
       view.updateView();
     }
   }
@@ -56,5 +65,13 @@ export class Witcase<T> implements BaseEngine {
 
   public registerView(view: View<T>){
     this.views.push(view);
+  }
+
+  public unregisterView(viewToRemove: View<T>){
+    this.views = this.views.filter((view) => { return viewToRemove !== view });
+  }
+
+  public registerController(controller: Controller<T>){
+    this.controllers.push(controller);
   }
 }

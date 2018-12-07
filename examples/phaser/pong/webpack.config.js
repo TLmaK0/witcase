@@ -1,6 +1,4 @@
 const path = require('path');
-const phaserModuleRelativePath = '/node_modules/phaser-ce/';
-const phaserModulePath = path.join(__dirname, phaserModuleRelativePath);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
@@ -8,6 +6,9 @@ const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 module.exports = {
   externals: {
     'phaser-ce': 'phaser-ce'
+  },
+  node: {
+    fs: 'empty'
   },
   entry: path.resolve(__dirname, 'src/app.ts'),
   output: {

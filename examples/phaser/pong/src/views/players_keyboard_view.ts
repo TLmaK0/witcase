@@ -1,15 +1,15 @@
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'phaser-mvc';
+import { Singleton } from 'typescript-ioc';
+import { View, ViewComponentAdder, ViewObservable } from 'witcase';
 
 /**
  * Players View
  */
+@Singleton
 export class PlayersKeyboardView extends View<Phaser.Game> {
-  private watchFactory: WatchFactory;
-  onMovePlayer: ViewNotifier<[number, string]> = new ViewNotifier<[number, string]>();
-  onStopPlayer: ViewNotifier<number> = new ViewNotifier<number>();
+  onMovePlayer: ViewObservable<[number, string]> = new ViewObservable<[number, string]>();
+  onStopPlayer: ViewObservable<number> = new ViewObservable<number>();
 
-  public updateOnModelChange(watchFactory: WatchFactory){
-    this.watchFactory = watchFactory;
+  public create(_componentAdder: ViewComponentAdder<Phaser.Game>) {
     this.watchForKeys(0, [Phaser.Keyboard.W, Phaser.Keyboard.S]);
     this.watchForKeys(1, [Phaser.Keyboard.O, Phaser.Keyboard.K]);
   }
@@ -21,7 +21,7 @@ export class PlayersKeyboardView extends View<Phaser.Game> {
   }
 
   private watchForKeys(playerId: number, keys: number[]){
-    this.watchFactory.create<[number, boolean, boolean]>(() => [
+    this.onChange<[number, boolean, boolean]>(() => [
       playerId,
       this.engine.input.keyboard.isDown(keys[0]),
       this.engine.input.keyboard.isDown(keys[1])

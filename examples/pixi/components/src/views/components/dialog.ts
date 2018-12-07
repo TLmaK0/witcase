@@ -51,5 +51,4 @@ export class Dialog extends ViewComponent<PixiEngine> {
   public open = () => {
     this.group.visible = true;
   }
-
 }

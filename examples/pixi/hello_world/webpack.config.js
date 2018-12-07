@@ -6,6 +6,9 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
 module.exports = {
+  node: {
+    fs: 'empty'
+  },
   externals: {
     'pixi.js': 'pixi.js'
   },

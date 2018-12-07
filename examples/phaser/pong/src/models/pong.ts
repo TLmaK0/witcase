@@ -1,13 +1,15 @@
+import { Singleton } from 'typescript-ioc';
 import { Ball } from './ball';
 import { Player } from './player';
 import { Score } from './score';
 
+@Singleton
 export class Pong {
   players: Player[];
   score: Score = new Score();
   ball: Ball = new Ball();
-  playersTimeout: NodeJS.Timer[] = [];
-  ballTimeout: NodeJS.Timer;
+  playersTimeout: number[] = [];
+  ballTimeout: number;
   bounds: number[];
   step: number = 10;
 

@@ -3,7 +3,7 @@
 //   ../../@reactivex/rxjs
 
 import { Observable } from '@reactivex/rxjs';
-import { Observable, Observer } from '@reactivex/rxjs';
+import { Observable, Subject } from '@reactivex/rxjs';
 
 export interface BaseEngine {
     preload(): void;
@@ -15,15 +15,32 @@ export interface BaseEngine {
 /**
   * Controller accepts input from view and converts modifieds the model.
   */
-export abstract class Controller {
+export abstract class Controller<T> extends ModelObservableFactory {
+    protected route: RouteService;
+    constructor(witcase?: Witcase<T>);
 }
 
 export class Guid {
     static newGuid(): string;
 }
 
-export class ViewNotifier<T> {
-    constructor();
+export class ModelObservableFactory {
+    protected onChange<T>(getModel: () => T): Observable<T>;
+    checkModelChanges(): void;
+}
+
+export class RouteActionParams {
+    route: string;
+    action: string | undefined;
+    params: string | undefined;
+    constructor(route: string, action?: string | undefined, params?: string | undefined);
+}
+export class RouteService extends WitcaseObservable<RouteActionParams> {
+    goTo(route: string, action?: string, params?: any): void;
+    onRoute(route: string, observer: (routeParams: RouteActionParams) => void): void;
+}
+
+export class ViewObservable<T> extends WitcaseObservable<T> {
     subscribe(observer: (t: T) => void): void;
     publish(value?: T): void;
 }
@@ -38,17 +55,19 @@ export class ViewComponentAdder<T> {
 /**
     * Input and ouput for the application
     */
-export abstract class View<T> {
+export abstract class View<T> extends ModelObservableFactory {
         protected components: ViewComponent<T>[];
+        onCreated: ViewObservable<void>;
         constructor(witcase?: Witcase<T>);
         create(_componentAdder: ViewComponentAdder<T>): void;
-        update(): void;
+        update(_componentAdder: ViewComponentAdder<T>): void;
         render(): void;
         show(): void;
+        hide(): void;
         readonly engine: T;
         updateView(): void;
         renderView(): void;
-        updateOnModelChange(_watchFactory: WatchFactory): void;
+        destroy(): void;
 }
 /**
     * Component to be showed in view
@@ -57,30 +76,35 @@ export abstract class ViewComponent<T> {
         view: View<T>;
         protected components: ViewComponent<T>[];
         create(_componentAdder: ViewComponentAdder<T>): void;
-        update(): void;
+        update(_componentAdder: ViewComponentAdder<T>): void;
         render(): void;
+        destroy(): void;
         createComponent(componentAdder: ViewComponentAdder<T>, view: View<T>): void;
-        updateComponent(): void;
+        updateComponent(componentAdder: ViewComponentAdder<T>): void;
         renderComponent(): void;
+        destroyComponent(): void;
+        hideComponent(): void;
+        showComponent(): void;
+        hide(): void;
+        show(): void;
         protected readonly engine: T;
 }
 
-export class WatchFactory {
-    watchsModel: WatchModel<any>[];
+export class WitcaseObservable<T> {
+    protected observable: Observable<T>;
+    protected subject: Subject<T>;
     constructor();
-    create<T>(getModel: () => T): Observable<T>;
+    protected subscribe(observer: (t: T) => void): void;
+    protected publish(value?: T): void;
 }
 
-export class WatchModel<T> {
-    observable: Observable<T>;
-    observer: Observer<() => T>;
-    getModel: () => T;
-}
-
+/**
+  */
 export class Witcase<T> implements BaseEngine {
     engine: T;
     defaultAction: () => void;
     static current: any;
+    route: RouteService;
     static create<T>(): any;
     start(engineStarter: (baseEngine: BaseEngine) => T): void;
     create: () => void;
@@ -89,5 +113,7 @@ export class Witcase<T> implements BaseEngine {
     update: () => void;
     render: () => void;
     registerView(view: View<T>): void;
+    unregisterView(viewToRemove: View<T>): void;
+    registerController(controller: Controller<T>): void;
 }
 

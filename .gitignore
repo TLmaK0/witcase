@@ -1,2 +1,4 @@
 node_modules
 lib/vendor
+*.swp
+yarn-error.log
