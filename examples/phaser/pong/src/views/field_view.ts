@@ -1,4 +1,5 @@
-import { View, ViewComponentAdder, WatchFactory  } from 'witcase';
+import { Inject, Singleton } from 'typescript-ioc';
+import { View, ViewComponentAdder, Witcase } from 'witcase';
 import { Pong } from '../models/pong';
 import { Ball } from '../models/ball';
 import { Score } from '../models/score';
@@ -7,9 +8,15 @@ import { Scoreboard } from './components/scoreboard';
 const pongWav = require('../assets/audios/pong.wav');
 const failWav = require('../assets/audios/fail.wav');
 
+Witcase.preload<Phaser.Game>((engine: Phaser.Game) => {
+  engine.load.audio('pongWav', pongWav);
+  engine.load.audio('failWav', failWav);
+});
+
 /**
  * Field View
  */
+@Singleton
 export class FieldView extends View<Phaser.Game> {
   private scorePlayer1: number;
   private scorePlayer2: number;
@@ -20,27 +27,22 @@ export class FieldView extends View<Phaser.Game> {
   private failEffect: Phaser.Sound;
   private lastSpeed: number;
   private lastSlope: number;
-  public pong: Pong;
 
-  public create() {
+  constructor(
+    @Inject private pong: Pong
+  ){
+    super();
+  }
+
+  public create(componentAdder: ViewComponentAdder<Phaser.Game>) {
     this.createNet();
     this.ball = this.engine.add.graphics(0, 0);
     this.pongEffect = this.engine.add.audio('pongWav');
     this.failEffect = this.engine.add.audio('failWav');
-  }
-
-  public preload(componentAdder: ViewComponentAdder<Phaser.Game>){
-    this.engine.load.audio('pongWav', pongWav);
-    this.engine.load.audio('failWav', failWav);
-
-    const bounds = this.pong.bounds;
-    this.scoreboard = componentAdder.addComponent(new Scoreboard(bounds));
-  }
-
-  public updateOnModelChange(watchFactory: WatchFactory){
-    watchFactory.create<[number, number]>(() => [this.pong.ball.posX, this.pong.ball.posY]).subscribe(this.updateBall);
-    watchFactory.create<Score>(() => this.pong.score).subscribe(this.updateScore);
-    watchFactory.create<[number, number]>(() => [this.pong.ball.slope, this.pong.ball.speed]).subscribe(this.bounceBall);
+    this.scoreboard = componentAdder.addComponent(new Scoreboard(this.pong.bounds));
+    this.onChange<[number, number]>(() => [this.pong.ball.posX, this.pong.ball.posY]).subscribe(this.updateBall);
+    this.onChange<Score>(() => this.pong.score).subscribe(this.updateScore);
+    this.onChange<[number, number]>(() => [this.pong.ball.slope, this.pong.ball.speed]).subscribe(this.bounceBall);
   }
 
   private bounceBall = (_slopeSpeed: [number, number]) => {

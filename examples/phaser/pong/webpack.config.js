@@ -7,6 +7,9 @@ module.exports = {
   externals: {
     'phaser-ce': 'phaser-ce'
   },
+  node: {
+    fs: 'empty'
+  },
   entry: path.resolve(__dirname, 'src/app.ts'),
   output: {
     path: path.resolve(__dirname, 'dist'),

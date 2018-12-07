@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser-ce';
 import { Witcase, BaseEngine } from 'witcase';
 import { GameController } from './controllers/game_controller';
-import { Containter } from 'typescript-ioc';
+import { Container } from 'typescript-ioc';
 /*
  * Bootstrap game
  */
@@ -18,8 +18,7 @@ window.onload = () => {
         preload: () => {
           game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-          //wait until Phaser is ready to create first controller
-          witcase.defaultAction = new GameController().startGame;
+          witcase.defaultAction = Container.get(GameController).startGame;
           baseEngine.preload();
         },
         create: baseEngine.create,

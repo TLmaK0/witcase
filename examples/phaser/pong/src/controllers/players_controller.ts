@@ -1,19 +1,22 @@
+import { Inject, Singleton } from 'typescript-ioc';
 import { Controller } from 'witcase';
 import { Pong } from '../models/pong';
 import { PlayersKeyboardView } from '../views/players_keyboard_view';
 import { PlayersView } from '../views/players_view';
 
-export class PlayersController extends Controller {
-  playersView: PlayersView = new PlayersView();
-  playersKeyboardView: PlayersKeyboardView = new PlayersKeyboardView();
-  pong: Pong;
-
-  public preparePlayers = (pong: Pong) => {
-    this.pong = pong;
-    this.playersView.pong = this.pong;
+@Singleton
+export class PlayersController extends Controller<Phaser.Game> {
+  constructor(
+    @Inject private playersView: PlayersView,
+    @Inject private playersKeyboardView: PlayersKeyboardView,
+    @Inject private pong: Pong
+  ) {
+    super();
     this.playersKeyboardView.onMovePlayer.subscribe(this.movePlayer);
     this.playersKeyboardView.onStopPlayer.subscribe(this.stopPlayer);
+  }
 
+  public preparePlayers = () => {
     this.playersView.show();
     this.playersKeyboardView.show();
   }
