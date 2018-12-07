@@ -18,6 +18,7 @@ A Javascript MVC Game engine.
 // app.ts
 import { Witcase } from 'witcase';
 import { StartupController } from './controllers/startup_controller';
+import { Container } from 'typescript-ioc';
 
 /*
  * Bootstrap game with Phaser
@@ -63,7 +64,7 @@ import { StartupView } from '../views/startup_view';
 /**
  * Startup controller
  */
-export class StartupController extends Controller {
+export class StartupController extends Controller<Phaser.Game> {
   private startupView: StartupView;
 
   constructor(){
@@ -89,7 +90,7 @@ import { Controller, ViewComponentAdder } from 'witcase';
 export class StartupView extends View {
   public welcomeMessage: string;
 
-  public create(_componentAdder: ViewComponentAdder) {
+  public create(_componentAdder: ViewComponentAdder<Phaser.Game>) {
     this.game.add.text(100,
                        100,
                        this.welcomeMessage,
@@ -99,8 +100,8 @@ export class StartupView extends View {
 
 Update view on model change:
 ```
-  public updateOnModelChange(watchFactory: WatchFactory){
-    watchFactory.create<number>(() => this.cannon.angle).subscribe(this.rotateCannon);
+  public create(_componentAdder: ViewComponentAdder<Phaser.Game>) {
+    this.onChange<number>(() => this.cannon.angle).subscribe(this.rotateCannon);
   }
 
   private rotateCannon = (angle: number) => {
@@ -111,21 +112,21 @@ Update view on model change:
 Subscrive controllers to views input events:
 ```
 // view
-import { View, ViewComponentAdder, WatchFactory, ViewNotifier } from 'witcase';
+import { View, ViewComponentAdder, ViewObservable } from 'witcase';
 
 /**
  * Players Keys View
  */
 
-export class PlayerKeysView extends View {
-  rotateCannon: ViewNotifier<string> = new ViewNotifier<string>();
-  rotateCannonStop: ViewNotifier<void> = new ViewNotifier<void>();
-  launchHuman: ViewNotifier<void> = new ViewNotifier<void>();
+export class PlayerKeysView extends View<Phaser.Game> {
+  rotateCannon: ViewObservable<string> = new ViewObservable<string>();
+  rotateCannonStop: ViewObservable<void> = new ViewObservable<void>();
+  launchHuman: ViewObservable<void> = new ViewObservable<void>();
 
   public updateOnModelChange(watchFactory: WatchFactory){
-    watchFactory.create<[boolean, boolean]>(() => [
-      this.game.input.keyboard.isDown(Phaser.Keyboard.LEFT),
-      this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
+    this.onChange<[boolean, boolean]>(() => [
+      this.engine.input.keyboard.isDown(Phaser.Keyboard.LEFT),
+      this.engine.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
     ]).subscribe(this.moveCannon);
   }
 
